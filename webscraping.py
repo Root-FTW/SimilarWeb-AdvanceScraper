@@ -13,7 +13,7 @@ driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 
 # Extraer URLs desde el archivo
 urls = []
-with open('links.txt', 'r') as file:
+with open('urls.txt', 'r') as file:  # Cambiado a 'urls.txt'
     content = file.read()
     urls = [url.strip().strip("'\"") for url in content.split(',')]
 
