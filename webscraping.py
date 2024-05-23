@@ -97,7 +97,7 @@ country_rank_min = df["Country Rank"].apply(lambda x: int(x.replace(',', ''))).i
 fig, ax = plt.subplots(figsize=(12, 6))
 
 # Añadir título
-plt.title('BuscaMedia', fontsize=20, weight='bold')
+plt.title('BuscaMedia', fontsize=20, weight='bold', pad=20)  # Ajuste del espacio con 'pad'
 
 # Ocultar el eje
 ax.axis('off')
