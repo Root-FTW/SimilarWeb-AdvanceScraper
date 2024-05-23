@@ -85,8 +85,19 @@ driver.quit()
 df = pd.read_csv('results.csv', names=[
     "URL", "Total Visits", "Bounce Rate", "Pages per Visit", "Average Visit Duration", "Global Rank", "Country Rank"])
 
+# Encontrar los valores a resaltar
+total_visits_max = df["Total Visits"].apply(lambda x: float(x.replace('M', 'e6').replace('K', 'e3'))).idxmax()
+bounce_rate_min = df["Bounce Rate"].apply(lambda x: float(x.replace('%', ''))).idxmin()
+pages_per_visit_max = df["Pages per Visit"].astype(float).idxmax()
+average_visit_duration_max = df["Average Visit Duration"].apply(lambda x: sum(int(t) * 60 ** i for i, t in enumerate(reversed(x.split(":"))))).idxmax()
+global_rank_min = df["Global Rank"].apply(lambda x: int(x.replace(',', ''))).idxmin()
+country_rank_min = df["Country Rank"].apply(lambda x: int(x.replace(',', ''))).idxmin()
+
 # Configurar la figura
 fig, ax = plt.subplots(figsize=(12, 6))
+
+# Añadir título
+plt.title('BuscaMedia', fontsize=20, weight='bold')
 
 # Ocultar el eje
 ax.axis('off')
@@ -99,7 +110,7 @@ table.auto_set_font_size(False)
 table.set_fontsize(10)
 table.scale(1.2, 1.2)
 
-# Establecer un estilo para las celdas
+# Establecer un estilo para las celdas y resaltar los valores
 for key, cell in table.get_celld().items():
     cell.set_edgecolor('black')
     cell.set_linewidth(1)
@@ -116,6 +127,20 @@ for key, cell in table.get_celld().items():
             cell.set_facecolor('#f9f9f9')
         else:  # Filas impares
             cell.set_facecolor('#ffffff')
+        
+        # Resaltar los valores específicos
+        if key[1] == 1 and key[0] == total_visits_max + 1:
+            cell.set_text_props(weight='bold')
+        if key[1] == 2 and key[0] == bounce_rate_min + 1:
+            cell.set_text_props(weight='bold')
+        if key[1] == 3 and key[0] == pages_per_visit_max + 1:
+            cell.set_text_props(weight='bold')
+        if key[1] == 4 and key[0] == average_visit_duration_max + 1:
+            cell.set_text_props(weight='bold')
+        if key[1] == 5 and key[0] == global_rank_min + 1:
+            cell.set_text_props(weight='bold')
+        if key[1] == 6 and key[0] == country_rank_min + 1:
+            cell.set_text_props(weight='bold')
 
 # Ajustar el ancho de las columnas
 table.auto_set_column_width([i for i in range(len(df.columns))])
